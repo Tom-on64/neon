@@ -18,10 +18,10 @@ void main() {
 
 ### Compiling a program
 For compiling, you can use the Neon compiler.
-Here's an example compiling our Hello, World program:
+Here's an example compiling our Hello, World program:\
 `neon test.ne -o test`
 
-We can run this using `./neon` and we should see:\\
+We can run this using `./test` and we should see:\
 `Hello, World!`
 
 ## For planned features, see [Todo](./todo.txt)
