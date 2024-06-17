@@ -1,0 +1,13 @@
+.DS_Store
+
+# Binaries
+bin/
+
+# Object files
+*.o
+*.obj
+*.elf
+
+# Vim swp files
+*.swp
+

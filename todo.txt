@@ -1,0 +1,11 @@
+=== TODO ===
+
+Legend:
+- [ ] Not done
+- [x] Done
+- [_] Was done at some point, but isn't now
+- [!] Important todo
+- [?] Optional
+
+- [ ] Make the language
+
