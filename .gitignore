@@ -11,3 +11,6 @@ bin/
 # Vim swp files
 *.swp
 
+# Test directory
+test/
+

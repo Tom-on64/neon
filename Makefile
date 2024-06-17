@@ -1,7 +1,8 @@
 CC = clang
 LD = clang
 
-CCFLAGS = -std=c11 -O2 -Wall -Wextra -Wpedantic -Iinclude
+CCFLAGS = -std=c11 -O2 -Wall -Wextra -Wpedantic -Iinclude\
+		  -Wno-unused-parameter
 LDFLAGS = 
 
 SRC_DIR = ./src
