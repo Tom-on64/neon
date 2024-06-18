@@ -11,6 +11,7 @@
 - return
 - break
 - continue
+- exit
 - goto
 - true
 - false

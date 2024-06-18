@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "error.h"
 #include "lexer.h"
 
 #define VERSION "0.0.1"
@@ -20,7 +21,7 @@ int main(int argc, char** argv) {
             exit(1);
         } else if (strcmp(argv[i], "-o") == 0) {
             if (i + 1 >= argc) {
-                printf("Expected file after '-o'. (-o <file>)\n");
+                error("Expected file after '-o'. (-o <file>)");
                 exit(1);
             }
 
@@ -31,7 +32,7 @@ int main(int argc, char** argv) {
     }
 
     if (infile == NULL) {
-        fprintf(stderr, "Error: no input files given!\n");
+        error("No input files given!");
         exit(1);
     }
 
@@ -41,7 +42,19 @@ int main(int argc, char** argv) {
     tokenize(code, tokens);
     free(code);
 
-    printf("%d\n", tokens[0].type);
+    size_t i = 0;
+    while (tokens[i].type != END_OF_FILE) {
+        token_t tkn = tokens[i++];
+
+        printf("{ type: %d, value: ", tkn.type);
+        if (tkn.type == L_INTEGER) printf("%d", tkn.value.integer);
+        else if (tkn.type == L_FLOAT);// TODO
+        else if (tkn.type == L_CHAR) printf("'%c'", tkn.value.character);
+        else if (tkn.type == END_OF_LINE) printf("EOL");
+        else printf("\"%s\"", tkn.value.string);
+        
+        printf(", row: %d, col: %d }\n", tkn.row, tkn.col);
+    }
 
     return 0;
 }
@@ -49,7 +62,7 @@ int main(int argc, char** argv) {
 char* loadFile(char* file) {
     FILE* fp;
     if ((fp = fopen(file, "r")) == NULL) {
-        fprintf(stderr, "File %s does not exist!\n", file);
+        error("File does not exist!");
         exit(1);
     }
 
@@ -59,7 +72,7 @@ char* loadFile(char* file) {
 
     char* buf = malloc(len);
     if (fread(buf, len, 1, fp) != 1) {
-        fprintf(stderr, "Failed while reading %s!\n", file);
+        error("Failed while reading file!");
         exit(1);
     }
 
