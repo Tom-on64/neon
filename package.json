@@ -1,0 +1,9 @@
+{
+    "name": "neon",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "test": "node ./src/main.js",
+        "build": "echo -e '\\e[31mNo build script!\\e[0m'"
+    }
+}
