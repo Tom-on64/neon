@@ -35,12 +35,21 @@ for (let i = 1; i < argv.length; i++) {
                 }
                 outfile = argv[i];
                 break;
+            default:
+                console.log(`Unknown command line option '${arg}'!`);
+                process.exit(1);
+                break;
         }
     } else {
         infile = arg;
     }
 }
 
-// TODO: The actuall compiling part of the compiler
+if (!infile) {
+    console.log("No input file given!");
+    process.exit(1);
+}
+
+// TODO: The actual compiling part of the compiler
 console.log(`${infile} -> ${outfile}`);
 
