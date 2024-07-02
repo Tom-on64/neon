@@ -1,7 +1,10 @@
 .DS_Store
 
-# Binaries
+# Output files
 bin/
+*.s
+*.o
+*.bin
 
 # Vim swp files
 *.swp
