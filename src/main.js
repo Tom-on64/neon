@@ -1,3 +1,6 @@
+import { readFile } from "node:fs";
+import { tokenize } from "./lexer.js";
+
 const HELP_MSG = "Usage: neon <file> [-o <file>] [-h] [-v]";
 const VERSION = "0.0.1";
 
@@ -50,6 +53,14 @@ if (!infile) {
     process.exit(1);
 }
 
-// TODO: The actual compiling part of the compiler
 console.log(`${infile} -> ${outfile}`);
+
+readFile(infile, (err, data) => {
+    if (err) {
+        console.error(`${err.code}: File '${err.path}' not found!`);
+        process.exit(1);
+    }
+
+    tokenize(data.toString()); // TODO: write tokenizer
+});
 
