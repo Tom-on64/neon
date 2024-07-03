@@ -5,13 +5,10 @@ _A ~~Stable~~, ~~Fast~~, Low-level, Compiled Programming Language_
 _[See docs for more info](./docs/main.md)_
 
 ### Syntax
-Neon's syntax is a blend between C and JavaScript 
-with some extra things for convenience sake.
+Neon's syntax is a blend between C and JavaScript with some extra things for convenience sake.
 
 ### Compiling
-To compile a program written in Neon,
-you can use the Neon Compiler.
-
+To compile a program written in Neon, you can use the Neon Compiler.\
 `$ neon ./path/to/file.ne -o ./output/file`\
 Then you can run the executable like this:\
 `./output/file`

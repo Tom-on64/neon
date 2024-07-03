@@ -46,6 +46,8 @@ Legend:
     - [ ] Unions
     - [ ] goto and labels
     - [ ] inline assembly?
+    - [ ] Code optimisation
+    - [ ] Error handling
 - [ ] Syntax
     - [ ] Variables
     - [ ] Functions
@@ -53,8 +55,8 @@ Legend:
     - [ ] Operators
     - [ ] Preprocessor
 - [ ] Lexer
-    - [ ] Define token structures
-    - [ ] Analyze code into tokens
+    - [x] Define token structures
+    - [x] Analyze code into tokens
     - [ ] Basic error handling
     - [ ] Column and row numbers
 - [ ] Parser

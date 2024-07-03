@@ -1,5 +1,5 @@
 import { readFile } from "node:fs";
-import { tokenize } from "./lexer.js";
+import { Lexer } from "./lexer.js";
 
 const HELP_MSG = "Usage: neon <file> [-o <file>] [-h] [-v]";
 const VERSION = "0.0.1";
@@ -61,6 +61,14 @@ readFile(infile, (err, data) => {
         process.exit(1);
     }
 
-    tokenize(data.toString()); // TODO: write tokenizer
+    // TODO: Preprocessor
+    const lexer = new Lexer();
+    const tokens = lexer.tokenize(data.toString());
+    tokens.forEach(t => console.log(t));
+    // TODO: Parser
+    // TODO: Optimisation??
+    // TODO: Code generator
+    // TODO: Assembler
+    // TODO: Output executable
 });
 
