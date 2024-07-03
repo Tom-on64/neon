@@ -23,7 +23,7 @@ _Note: There currently isn't an executable,
 so you can use `$ node ./src/main.js \<flags>`_
 
 ### Building Neon
-Of you want to compile neon yourself, you can run these commands:
+If you want to compile neon yourself, you can run these commands:
 ```git
 $ git clone https://github.com/Tom-on64/neon.git # Clones the repo
 $ npm run build # Builds the exe into ./build
