@@ -20,7 +20,7 @@ To see all compiler options, use the `-h` flag.\
 `$ neon -h`
 
 _Note: There currently isn't an executable, 
-so you can use `$ node ./src/main.js \<flags>`_
+so you can use `$ node ./src/main.js <flags>`_
 
 ### Building Neon
 If you want to compile neon yourself, you can run these commands:
