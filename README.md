@@ -37,5 +37,5 @@ _More about development coming soon_
 ---
 
 For old repositories, see [neon-old](https://github.com/Tom-on64/neon-old).
-There's also the very first thing i wrote in my [random repo](https://github.com/Tom-on64/random).
+There's also the very first thing i wrote in my [random repo](https://github.com/Tom-on64/random) as [old_neon.js](https://github.com/Tom-on64/random/blob/main/old_neon.js)
 
