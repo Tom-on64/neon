@@ -1,13 +1,12 @@
 import { ttype } from "./lexer.js";
+import ast from "./ast.js";
 import { error, warn } from "./error.js";
 
-export const ntype = {
-    PROGRAM: "program",
-    EXIT: "exit",
-};
+export class Ast {}
 
 export class Parser {
     tokens = []; // Token[]
+    ast = {}; // Abstarct Syntax Tree
     index = 0;
 
     peek(dist = 0) {
@@ -28,31 +27,84 @@ export class Parser {
     parse(tokens) {
         this.tokens = tokens;
         this.index = 0;
+        this.ast = [];
 
-        const ast = this.parseProgram();
+        while (this.peek().type != ttype.EOF) this.ast.push(this.stmt());
 
-        return ast;
+        return this.ast;
     }
 
-    parseProgram() {
-        const program = { type: ntype.PROGRAM, statements: [] };
+    stmt() {
+        const t = this.peek();
+
+        switch (t.type) {
+            case ttype.KEYWORD: 
+                if (t.value != "exit") break;
+                this.consume()
+                const e = this.expr();
+                this.expect(ttype.EOL);
+                return ast.Exit(e);
+            default:
+                return this.expr();
+        }
+    }
+
+    expr() {
+        const left = this.simple();
         
-        while (this.peek().type != ttype.EOF) {
-            program.statements.push(this.parseStatement());
+        if (this.isOp(this.peek().type)) {
+            const op = this.consume();
+            const right = this.expr();
+            return ast.Binary(left, op, right);
         }
 
-        return program;
+        return left;
     }
 
-    parseStatement() {
+    simple() {
         const t = this.consume();
-        
-        if (t.type == ttype.KEYWORD) {
-            const exitCode = this.expect(ttype.L_INT).value;
-            this.expect(ttype.EOL);
-            
-            return { type: ntype.EXIT, exitCode };
-        } else warn(`Unexpected ${t.type}!`);
+
+        switch (t.type) {
+            case ttype.L_INT:
+                return ast.L_Int(parseInt(t.value));
+            case ttype.L_FLOAT:
+                return ast.L_Float(parseFloat(t.value));
+            case ttype.L_CHAR:
+                return ast.L_Char(t.value);
+            case ttype.L_BOOL:
+                return ast.L_Bool(t.value);
+            case ttype.L_STRING:
+                return ast.L_String(t.value);
+            case ttype.IDENT:
+                return ast.Var(t.value);
+            // TODO: Arrays
+        }
+
+        error(`Expected expression, but got ${t.type}${t.value ? " ('" + t.value + "')" : ""}.`);
+    }
+
+    isOp(type) {
+        return [
+            ttype.ASSIGN,
+            ttype.EQUIV,
+            ttype.NOT_EQUIV,
+            ttype.GT,
+            ttype.GTE,
+            ttype.LT,
+            ttype.LTE,
+            ttype.OR,
+            ttype.AND,
+            ttype.NOT, 
+            ttype.PLUS,
+            ttype.MINUS,
+            ttype.STAR,
+            ttype.SLASH,
+            ttype.BIT_OR,
+            ttype.BIT_AND,
+            ttype.BIT_NOT,
+            ttype.BIT_XOR,
+            ttype.PERIOD,
+        ].includes(type); 
     }
 }
 

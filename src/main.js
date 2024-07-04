@@ -58,8 +58,9 @@ readFile(infile, (err, data) => {
     const parser = new Parser();
 
     const tokens = lexer.tokenize(data.toString());
+    //console.log(tokens);
     const ast = parser.parse(tokens);
-    console.log(ast);
+    console.log(JSON.stringify(ast, null, '\t'));
     // TODO: Optimisation??
     // TODO: Code generator
     // TODO: Assembler
