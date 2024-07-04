@@ -81,6 +81,20 @@ export class Lexer {
         if (this.peek().match(/\s/)) { // Whitespace
             this.consume();
             return
+        } else if (this.peek() == '/' && (this.peek(1) == '/' || this.peek(1) == '*')) { // Comments
+            this.consume();
+            if (this.consume() == '/') {
+                while (this.peek() != '\n') {
+                    this.consume();
+                }
+                this.consume();
+            } else {
+                while (this.peek() != '*' && this.peek(1) != '/') {
+                    this.consume();
+                }
+                this.consume();
+                this.consume();
+            }
         } else if (this.peek().match(/[A-Za-z_]/)) { // Identifier or keyword
             let string = this.consume();
             while (this.peek().match(/[A-Za-z0-9_]/)) {

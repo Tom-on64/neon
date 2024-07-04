@@ -1,5 +1,6 @@
 import { readFile } from "node:fs";
 import { Lexer } from "./lexer.js";
+import { Parser } from "./parser.js";
 
 const HELP_MSG = "Usage: neon <file> [-o <file>] [-h] [-v]";
 const VERSION = "0.0.1";
@@ -63,9 +64,11 @@ readFile(infile, (err, data) => {
 
     // TODO: Preprocessor
     const lexer = new Lexer();
+    const parser = new Parser();
+
     const tokens = lexer.tokenize(data.toString());
-    tokens.forEach(t => console.log(t));
-    // TODO: Parser
+    const ast = parser.parse(tokens);
+    console.log(ast);
     // TODO: Optimisation??
     // TODO: Code generator
     // TODO: Assembler
