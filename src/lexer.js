@@ -1,3 +1,5 @@
+import { error, warn } from "./error.js";
+
 // Token Types
 export const ttype = { // TODO: Change these to numbers
     EOF: "EOF",
@@ -54,13 +56,13 @@ export class Lexer {
     index = 0;
 
     peek(dist = 0) {
-        if (this.index + dist >= this.string.length) return null; // TODO: Error!!!
+        if (this.index + dist >= this.string.length) error("Unexpected End Of File!");
         return this.string[this.index + dist];
     }
 
     consume() {
-        if (this.index < this.string.length) return this.string[this.index++]
-        return null; // TODO: Error!!!
+        if (this.index < this.string.length) return this.string[this.index++];
+        error("Unexpected End Of File!");
     }
 
     tokenize(code) {
@@ -80,7 +82,6 @@ export class Lexer {
     nextToken() {
         if (this.peek().match(/\s/)) { // Whitespace
             this.consume();
-            return
         } else if (this.peek() == '/' && (this.peek(1) == '/' || this.peek(1) == '*')) { // Comments
             this.consume();
             if (this.consume() == '/') {
@@ -125,13 +126,13 @@ export class Lexer {
                 numString += this.consume();
             }
 
-            if (this.peek() != 'f') return; // TODO Error!!
+            if (this.peek() != 'f') error("Expected 'f' after float literal!");
 
             return token(ttype.L_FLOAT, numString);
         } else if (this.peek() == '\'') { // Char literal
             this.consume(); // Consume quote
             const c = this.getChar(); 
-            if (this.peek() != '\'') return; // TODO: Error!!
+            if (this.peek() != '\'') error("Expected closing quote after character literal!");
             this.consume(); 
 
             return token(ttype.L_CHAR, c);
@@ -154,9 +155,8 @@ export class Lexer {
             
             if (special.includes(c)) {
                 return token(ttype.SPECIAL, c);
-            } else { // TODO: Proper error
-                console.log(`Unexpected '${c}'!`);
-                return;
+            } else { 
+                error(`Unexpected '${c}'!`);
             }
         }
     }

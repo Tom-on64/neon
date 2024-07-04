@@ -1,4 +1,5 @@
 import { ttype } from "./lexer.js";
+import { error, warn } from "./error.js";
 
 export const ntype = {
     PROGRAM: "program",
@@ -10,19 +11,18 @@ export class Parser {
     index = 0;
 
     peek(dist = 0) {
-        if (this.index + dist >= this.tokens.length) return null; // TODO: Error!!
+        if (this.index + dist >= this.tokens.length) error("Unexpected End Of File!");
         return this.tokens[this.index + dist];
     }
 
     consume() {
         if (this.index < this.tokens.length) return this.tokens[this.index++];
-        return null; // TODO: Error!!
+        error("Unexpected End Of File!");
     }
 
     expect(tokenType) {
         if (this.tokens[this.index].type == tokenType) return this.consume();
-        
-        console.error(`Expected ${tokenType}!`);
+        error(`Expected ${tokenType}!`);
     }
 
     parse(tokens) {
@@ -52,7 +52,7 @@ export class Parser {
             this.expect(ttype.EOL);
             
             return { type: ntype.EXIT, exitCode };
-        } else console.error("NA");
+        } else warn(`Unexpected ${t.type}!`);
     }
 }
 

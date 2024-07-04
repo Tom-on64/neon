@@ -1,6 +1,7 @@
 import { readFile } from "node:fs";
 import { Lexer } from "./lexer.js";
 import { Parser } from "./parser.js";
+import { error, warn } from "./error.js";
 
 const HELP_MSG = "Usage: neon <file> [-o <file>] [-h] [-v]";
 const VERSION = "0.0.1";
@@ -33,15 +34,11 @@ for (let i = 1; i < argv.length; i++) {
                 process.exit(0);
                 break;
             case "-o":
-                if (++i === argv.length) {
-                    console.log("Expected file after '-o'!");
-                    process.exit(1);
-                }
+                if (++i === argv.length) error("Expected file after '-o'!");
                 outfile = argv[i];
                 break;
             default:
-                console.log(`Unknown command line option '${arg}'!`);
-                process.exit(1);
+                error(`Unknown command line option '${arg}'!`);
                 break;
         }
     } else {
@@ -49,18 +46,12 @@ for (let i = 1; i < argv.length; i++) {
     }
 }
 
-if (!infile) {
-    console.log("No input file given!");
-    process.exit(1);
-}
+if (!infile) error("No file given!");
 
 console.log(`${infile} -> ${outfile}`);
 
 readFile(infile, (err, data) => {
-    if (err) {
-        console.error(`${err.code}: File '${err.path}' not found!`);
-        process.exit(1);
-    }
+    if (err) error(err.message);
 
     // TODO: Preprocessor
     const lexer = new Lexer();
