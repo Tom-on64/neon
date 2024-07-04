@@ -1,10 +1,8 @@
 {
     "name": "neon",
     "version": "0.0.1",
+    "bin": "./src/main.js",
     "private": true,
     "type": "module",
-    "scripts": {
-        "test": "node src/main.js test/test.ne -o test/out.s",
-        "build": "echo -e '\\e[31mNo build script!\\e[0m'"
-    }
+    "scripts": { "test": "./neon test/test.ne -o test/out.s" }
 }
