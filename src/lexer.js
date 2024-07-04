@@ -7,6 +7,25 @@ export const ttype = { // TODO: Change these to numbers
     IDENT: "Identifier",
     KEYWORD: "Keyword",
     SPECIAL: "Special",
+    ASSIGN: "=",
+    EQUIV: "==",
+    NOT_EQUIV: "!=",
+    GT: ">",
+    GTE: ">=",
+    LT: "<",
+    LTE: "<=",
+    OR: "||",
+    AND: "&&",
+    NOT: "!", 
+    PLUS: "+",
+    MINUS: "-",
+    STAR: "*",
+    SLASH: "/",
+    BIT_OR: "|",
+    BIT_AND: "&",
+    BIT_NOT: "~",
+    BIT_XOR: "^",
+    PERIOD: '.',
     L_INT: "Lit:int",
     L_FLOAT: "Lit:float",
     L_CHAR: "Lit:char",
@@ -42,10 +61,11 @@ export const keywords = [
     "struct",
     "union",
     "enum",
-    /* Special Operators */
+    /* Special Keywords */
     "sizeof",
     "typedef",
     "asm",
+    "null",
 ]
 
 export const token = (type, value = null) => ({ type, value });
@@ -63,6 +83,11 @@ export class Lexer {
     consume() {
         if (this.index < this.string.length) return this.string[this.index++];
         error("Unexpected End Of File!");
+    }
+
+    match(c) {
+        if (this.peek() == c) return this.consume();
+        return false;
     }
 
     tokenize(code) {
@@ -108,7 +133,7 @@ export class Lexer {
 
             return token(ttype.IDENT, string);
         } else if (this.peek().match(/[0-9]/)) { // Int/Float literal
-            const numString = this.consume();
+            let numString = this.consume();
 
             while (this.peek().match(/[0-9]/)) {
                 numString += this.consume();
@@ -116,48 +141,51 @@ export class Lexer {
 
             if (this.peek() != '.' && this.peek() != 'f') {
                 return token(ttype.L_INT, numString);
-            } else if (this.consume() == 'f') {
+            } else if (this.match('f')) {
                 return token(ttype.L_FLOAT, numString);
             }
 
-            numString += '.';
+            numString += this.consume();
 
             while (this.peek().match(/[0-9]/)) {
                 numString += this.consume();
             }
 
-            if (this.peek() != 'f') error("Expected 'f' after float literal!");
+            if (!this.match('f')) error("Expected 'f' after float literal!");
 
             return token(ttype.L_FLOAT, numString);
-        } else if (this.peek() == '\'') { // Char literal
-            this.consume(); // Consume quote
+        } else if (this.match('\'')) { // Char literal
             const c = this.getChar(); 
-            if (this.peek() != '\'') error("Expected closing quote after character literal!");
-            this.consume(); 
-
+            if (!this.match('\'')) error("Expected closing quote after character literal!");
+            
             return token(ttype.L_CHAR, c);
-        } else if (this.peek() == '"') { // String literal
-            this.consume(); // Consume quote
-
+        } else if (this.match('"')) { // String literal
             let string = "";
-            while (this.peek() != '"') {
-                string += this.getChar();
-            }
-
-            this.consume(); // We know this is a quote, because the loop has stopped
+            while (!this.match('"')) { string += this.getChar(); }
             return token(ttype.L_STRING, string);
-        } else if (this.peek() == ';') { // End of line
-            this.consume();
+        } else if (this.match(';')) { // End of line
             return token(ttype.EOL);
         } else { 
             const c = this.consume();
-            const special = "()[]{}=<>!&|~^+-/*%?:.," // All special characters allowed
-            
-            if (special.includes(c)) {
-                return token(ttype.SPECIAL, c);
-            } else { 
-                error(`Unexpected '${c}'!`);
+
+            switch (c) {
+                case '+': return token(ttype.PLUS);
+                case '-': return token(ttype.MINUS);
+                case '*': return token(ttype.STAR);
+                case '/': return token(ttype.SLASH);
+                case '.': return token(ttype.PERIOD);
+                case '|': return this.match('|') ? token(ttype.OR) : token(ttype.BIT_OR);
+                case '&': return this.match('&') ? token(ttype.AND) : token(ttype.BIT_AND);
+                case '~': return token(ttype.BIT_NOT);
+                case '^': return token(ttype.BIT_XOR);
+                case '!': return this.match('=') ? token(ttype.NOT_EQUIV) : token(ttype.NOT);
+                case '=': return this.match('=') ? token(ttype.EQUIV) : token(ttype.ASSIGN);
+                case '>': return this.match('=') ? token(ttype.GTE) : token(ttype.GT);
+                case '<': return this.match('=') ? token(ttype.LTE) : token(ttype.LT);
             }
+
+            if ("()[]{}?:=,".includes(c)) return token(ttype.SPECIAL, c);
+            error(`Unexpected '${c}'!`);
         }
     }
 
