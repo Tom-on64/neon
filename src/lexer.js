@@ -21,6 +21,7 @@ export const ttype = { // TODO: Change these to numbers
     MINUS: "-",
     STAR: "*",
     SLASH: "/",
+    MODULO: "%",
     BIT_OR: "|",
     BIT_AND: "&",
     BIT_NOT: "~",
@@ -173,6 +174,7 @@ export class Lexer {
                 case '-': return token(ttype.MINUS);
                 case '*': return token(ttype.STAR);
                 case '/': return token(ttype.SLASH);
+                case '%': return token(ttype.MODULO);
                 case '.': return token(ttype.PERIOD);
                 case '|': return this.match('|') ? token(ttype.OR) : token(ttype.BIT_OR);
                 case '&': return this.match('&') ? token(ttype.AND) : token(ttype.BIT_AND);

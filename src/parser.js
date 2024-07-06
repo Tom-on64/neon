@@ -1,8 +1,30 @@
 import { ttype } from "./lexer.js";
 import ast from "./ast.js";
+import { ntype } from "./ast.js";
 import { error, warn } from "./error.js";
 
-export class Ast {}
+const opOrder = {
+    [ttype.LT]: 0,
+    [ttype.LTE]: 0,
+    [ttype.GT]: 0,
+    [ttype.GTE]: 0,
+    [ttype.EQUIV]: 0,
+    [ttype.NOT_EQUIV]: 0,
+    [ttype.ASSIGN]: 0,
+    [ttype.AND]: 0,
+    [ttype.OR]: 0,
+    [ttype.NOT]: 0,
+    [ttype.PERIOD]: 0,
+    [ttype.PLUS]: 1,
+    [ttype.MINUS]: 1,
+    [ttype.BIT_AND]: 1,
+    [ttype.BIT_OR]: 1,
+    [ttype.BIT_NOT]: 1,
+    [ttype.BIT_XOR]: 1,
+    [ttype.MODULO]: 2,
+    [ttype.STAR]: 2,
+    [ttype.SLASH]: 2,
+}
 
 export class Parser {
     tokens = []; // Token[]
@@ -53,8 +75,20 @@ export class Parser {
         const left = this.simple();
         
         if (this.isOp(this.peek().type)) {
-            const op = this.consume();
+            const op = this.consume().type;
             const right = this.expr();
+
+            console.log(opOrder[op], opOrder[right.op]);
+            
+            if (right.type == ntype.BINOP && opOrder[op] > opOrder[right.op]) {
+                console.log(left, right);
+                return ast.Binary(
+                    ast.Binary(left, op, right.left),
+                    right.op,
+                    right.right
+                );
+            }
+
             return ast.Binary(left, op, right);
         }
 
