@@ -99,18 +99,17 @@ export class Parser {
         const t = this.consume();
 
         switch (t.type) {
-            case ttype.L_INT:
-                return ast.L_Int(parseInt(t.value));
-            case ttype.L_FLOAT:
-                return ast.L_Float(parseFloat(t.value));
-            case ttype.L_CHAR:
-                return ast.L_Char(t.value);
-            case ttype.L_BOOL:
-                return ast.L_Bool(t.value);
-            case ttype.L_STRING:
-                return ast.L_String(t.value);
-            case ttype.IDENT:
-                return ast.Var(t.value);
+            case ttype.L_INT: return ast.L_Int(parseInt(t.value));
+            case ttype.L_FLOAT: return ast.L_Float(parseFloat(t.value));
+            case ttype.L_CHAR: return ast.L_Char(t.value);
+            case ttype.L_BOOL: return ast.L_Bool(t.value);
+            case ttype.L_STRING: return ast.L_String(t.value);
+            case ttype.IDENT: return ast.Var(t.value);
+            case ttype.LPAREN: {
+                const expr = this.expr();
+                this.expect(ttype.RPAREN);
+                return expr;
+            }
             // TODO: Arrays
         }
 

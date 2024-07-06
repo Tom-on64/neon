@@ -6,7 +6,12 @@ export const ttype = { // TODO: Change these to numbers
     EOL: "EOL",
     IDENT: "Identifier",
     KEYWORD: "Keyword",
-    SPECIAL: "Special",
+    LPAREN: "(",
+    RPAREN: ")",
+    LBRACKET: "[",
+    RBRACKET: "]",
+    LBRACE: "{",
+    RBRACE: "}",
     ASSIGN: "=",
     EQUIV: "==",
     NOT_EQUIV: "!=",
@@ -170,6 +175,12 @@ export class Lexer {
             const c = this.consume();
 
             switch (c) {
+                case '(': return token(ttype.LPAREN);
+                case ')': return token(ttype.RPAREN);
+                case '[': return token(ttype.LBRACKET);
+                case ']': return token(ttype.RBRACKET);
+                case '{': return token(ttype.LBRACE);
+                case '}': return token(ttype.RBRACE);
                 case '+': return token(ttype.PLUS);
                 case '-': return token(ttype.MINUS);
                 case '*': return token(ttype.STAR);
