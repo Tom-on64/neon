@@ -78,8 +78,6 @@ export class Parser {
             const op = this.consume().type;
             const right = this.expr();
 
-            console.log(opOrder[op], opOrder[right.op]);
-            
             if (right.type == ntype.BINOP && opOrder[op] > opOrder[right.op]) {
                 console.log(left, right);
                 return ast.Binary(
