@@ -93,7 +93,7 @@ export class Lexer {
     }
 
     match(c) {
-        if (this.peek() == c) return this.consume();
+        if (this.peek() === c) return this.consume();
         return false;
     }
 
@@ -114,15 +114,15 @@ export class Lexer {
     nextToken() {
         if (this.peek().match(/\s/)) { // Whitespace
             this.consume();
-        } else if (this.peek() == '/' && (this.peek(1) == '/' || this.peek(1) == '*')) { // Comments
+        } else if (this.peek() === '/' && (this.peek(1) == '/' || this.peek(1) == '*')) { // Comments
             this.consume();
-            if (this.consume() == '/') {
-                while (this.peek() != '\n') {
+            if (this.consume() === '/') {
+                while (this.peek() !== '\n') {
                     this.consume();
                 }
                 this.consume();
             } else {
-                while (this.peek() != '*' && this.peek(1) != '/') {
+                while (this.peek() !== '*' && this.peek(1) != '/') {
                     this.consume();
                 }
                 this.consume();
@@ -146,7 +146,7 @@ export class Lexer {
                 numString += this.consume();
             }
 
-            if (this.peek() != '.' && this.peek() != 'f') {
+            if (this.peek() !== '.' && this.peek() != 'f') {
                 return token(ttype.L_INT, numString);
             } else if (this.match('f')) {
                 return token(ttype.L_FLOAT, numString);
@@ -206,7 +206,7 @@ export class Lexer {
 
     getChar() {
         const c = this.consume();
-        if (c != '\\') return c;
+        if (c !== '\\') return c;
 
         const esc = this.consume();
 

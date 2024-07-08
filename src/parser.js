@@ -42,7 +42,7 @@ export class Parser {
     }
 
     expect(tokenType) {
-        if (this.tokens[this.index].type == tokenType) return this.consume();
+        if (this.tokens[this.index].type === tokenType) return this.consume();
         error(`Expected ${tokenType}!`);
     }
 
@@ -51,7 +51,7 @@ export class Parser {
         this.index = 0;
         this.ast = [];
 
-        while (this.peek().type != ttype.EOF) this.ast.push(this.stmt());
+        while (this.peek().type !== ttype.EOF) this.ast.push(this.stmt());
 
         return this.ast;
     }
@@ -61,7 +61,7 @@ export class Parser {
 
         switch (t.type) {
             case ttype.KEYWORD: 
-                if (t.value != "exit") break;
+                if (t.value !== "exit") break;
                 this.consume()
                 const e = this.expr();
                 this.expect(ttype.EOL);
@@ -78,7 +78,7 @@ export class Parser {
             const op = this.consume().type;
             const right = this.expr();
 
-            if (right.type == ntype.BINOP && opOrder[op] > opOrder[right.op]) {
+            if (right.type === ntype.BINOP && opOrder[op] > opOrder[right.op]) {
                 return ast.Binary(
                     ast.Binary(left, op, right.left),
                     right.op,
@@ -109,8 +109,7 @@ export class Parser {
             }
             case ttype.LBRACKET: {
                 let items = [];
-                if (this.peek().type != ttype.RBRACKET) items = this.exprList;
-                console.log(this.peek());
+                if (this.peek().type !== ttype.RBRACKET) items = this.exprList();
                 this.expect(ttype.RBRACKET);
                 return ast.L_Array(items);
             }
@@ -123,7 +122,7 @@ export class Parser {
         const list = [];
         list.push(this.expr());
 
-        while (this.peek().type == ttype.COMMA) {
+        while (this.peek().type === ttype.COMMA) {
             this.consume(); // Consume comma
             list.push(this.expr());
         }
