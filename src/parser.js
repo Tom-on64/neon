@@ -1,4 +1,4 @@
-import { ttype } from "./lexer.js";
+import { ttype, keywords } from "./lexer.js";
 import ast from "./ast.js";
 import { ntype } from "./ast.js";
 import { error, warn } from "./error.js";
@@ -58,17 +58,65 @@ export class Parser {
 
     stmt() {
         const t = this.peek();
+        
+        if (t.type === ttype.TYPE) { return this.decl(); }
+        else if (t.type === ttype.KEYWORD) {
+            switch (t.value) {
+                case "exit": { this.consume();
+                    const e = this.expr(); 
+                    this.expect(ttype.EOL); 
+                    return ast.Exit(e); 
+                }
+                default: 
+                    error(`Unexpected ${t.value} keyword!`);
+                    break;
+            }
+        } else { return this.expr(); }
+    }
 
-        switch (t.type) {
-            case ttype.KEYWORD: 
-                if (t.value !== "exit") break;
-                this.consume()
-                const e = this.expr();
-                this.expect(ttype.EOL);
-                return ast.Exit(e);
-            default:
-                return this.expr();
+    decl() {
+        const type = this.expect(ttype.TYPE).value;
+        const ident = this.expect(ttype.IDENT).value;
+
+        if (this.peek().type === ttype.ASSIGN) { // Definition
+            this.expect(ttype.ASSIGN);
+            const value = this.expr();
+            this.expect(ttype.EOL);
+
+            return ast.Var(ident, value, type);
+        } else if (this.peek().type === ttype.EOL) { // Declaration (no value)
+            this.expect(ttype.EOL);
+            
+            return ast.Var(ident, null, type);
         }
+
+        // Function
+        const params = [];
+
+        this.expect(ttype.LPAREN);
+        if (this.peek().type !== ttype.RPAREN) {
+            params.push({ type: this.expect(ttype.TYPE).value, ident: this.expect(ttype.IDENT).value });
+
+            while (this.peek().type === ttype.COMMA) {
+                this.expect(ttype.COMMA);
+                params.push({ type: this.expect(ttype.TYPE).value, ident: this.expect(ttype.IDENT).value });
+            }
+        }
+        this.expect(ttype.RPAREN);
+
+        const body = this.scope();
+
+        return ast.Func(ident, body, params, type);
+    }
+
+    scope() {
+        const body = [];
+
+        this.expect(ttype.LBRACE);
+        while (this.peek().type !== ttype.RBRACE) { body.push(this.stmt()); }
+        this.expect(ttype.RBRACE);
+
+        return ast.Scope(body);
     }
 
     expr() {

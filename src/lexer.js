@@ -6,6 +6,7 @@ export const ttype = { // TODO: Change these to numbers
     EOL: "EOL",
     IDENT: "Identifier",
     KEYWORD: "Keyword",
+    TYPE: "Type",
     LPAREN: "(",
     RPAREN: ")",
     LBRACKET: "[",
@@ -57,14 +58,6 @@ export const keywords = [
     /* Storage specifiers */
     "const",
     // TODO: static, public, private, ...
-    /* Types */
-    "void",
-    "int", // TODO: Maybe a better integer naming system for different sizes
-    "uint", 
-    "float",
-    "double",
-    "char",
-    "string",
     "struct",
     "union",
     "enum",
@@ -73,7 +66,17 @@ export const keywords = [
     "typedef",
     "asm",
     "null",
-]
+];
+
+const types = [
+    "void",
+    "int", // TODO: Maybe a better integer naming system for different sizes
+    "uint", 
+    "float",
+    "double",
+    "char",
+    "string",
+];
 
 export const token = (type, value = null) => ({ type, value });
 
@@ -136,6 +139,8 @@ export class Lexer {
 
             if (keywords.includes(string)) {
                 return token(ttype.KEYWORD, string);
+            } else if (types.includes(string)) {
+                return token(ttype.TYPE, string);
             }
 
             return token(ttype.IDENT, string);
@@ -146,7 +151,7 @@ export class Lexer {
                 numString += this.consume();
             }
 
-            if (this.peek() !== '.' && this.peek() != 'f') {
+            if (this.peek() !== '.' && this.peek() !== 'f') {
                 return token(ttype.L_INT, numString);
             } else if (this.match('f')) {
                 return token(ttype.L_FLOAT, numString);

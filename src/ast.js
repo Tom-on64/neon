@@ -2,6 +2,8 @@ export const ntype = {
     VAR: "var",
     UNOP: "unop",
     BINOP: "binop",
+    FUNC: "function",
+    SCOPE: "scope",
     EXIT: "exit",
     LITERAL: "literal",
     L_INT: "lit:int",
@@ -16,6 +18,8 @@ export const Var = (ident, value = null, type = null) => ({ type: ntype.VAR, ide
 export const Unary = (op, expr) => ({ type: ntype.UNOP, expr });
 export const Binary = (left, op, right) => ({ type: ntype.BINOP, left, op, right });
 // TODO: Ternary
+export const Func = (ident, body, params, rtype) => ({ type: ntype.FUNC, ident, body, params, rtype });
+export const Scope = (body) => ({ type: ntype.SCOPE, body });
 export const Exit = (exitCode) => ({ type: ntype.EXIT, exitCode });
 
 export const L_Int = (int) => ({ type: ntype.LITERAL, ltype: ntype.L_INT, value: int });
@@ -26,7 +30,7 @@ export const L_String = (string) => ({ type: ntype.LITERAL, ltype: ntype.L_STRIN
 export const L_Array = (array) => ({ type: ntype.LITERAL, ltype: ntype.L_ARRAY, value: array });
 
 export default {
-    Var, Unary, Binary, Exit,
+    Var, Unary, Binary, Scope, Func, Exit,
     L_Int, L_Float, L_Char, L_Bool, L_String, L_Array,
 }
 
