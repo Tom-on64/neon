@@ -79,7 +79,6 @@ export class Parser {
             const right = this.expr();
 
             if (right.type == ntype.BINOP && opOrder[op] > opOrder[right.op]) {
-                console.log(left, right);
                 return ast.Binary(
                     ast.Binary(left, op, right.left),
                     right.op,
@@ -108,10 +107,28 @@ export class Parser {
                 this.expect(ttype.RPAREN);
                 return expr;
             }
-            // TODO: Arrays
+            case ttype.LBRACKET: {
+                let items = [];
+                if (this.peek().type != ttype.RBRACKET) items = this.exprList;
+                console.log(this.peek());
+                this.expect(ttype.RBRACKET);
+                return ast.L_Array(items);
+            }
         }
 
         error(`Expected expression, but got ${t.type}${t.value ? " ('" + t.value + "')" : ""}.`);
+    }
+
+    exprList() {
+        const list = [];
+        list.push(this.expr());
+
+        while (this.peek().type == ttype.COMMA) {
+            this.consume(); // Consume comma
+            list.push(this.expr());
+        }
+
+        return list;
     }
 
     isOp(type) {

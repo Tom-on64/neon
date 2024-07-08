@@ -31,7 +31,8 @@ export const ttype = { // TODO: Change these to numbers
     BIT_AND: "&",
     BIT_NOT: "~",
     BIT_XOR: "^",
-    PERIOD: '.',
+    PERIOD: ".",
+    COMMA: ",",
     L_INT: "Lit:int",
     L_FLOAT: "Lit:float",
     L_CHAR: "Lit:char",
@@ -195,6 +196,7 @@ export class Lexer {
                 case '=': return this.match('=') ? token(ttype.EQUIV) : token(ttype.ASSIGN);
                 case '>': return this.match('=') ? token(ttype.GTE) : token(ttype.GT);
                 case '<': return this.match('=') ? token(ttype.LTE) : token(ttype.LT);
+                case ',': return token(ttype.COMMA);
             }
 
             if ("()[]{}?:=,".includes(c)) return token(ttype.SPECIAL, c);
