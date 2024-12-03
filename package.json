@@ -1,8 +1,0 @@
-{
-    "name": "neon",
-    "version": "0.0.1",
-    "bin": "./src/main.js",
-    "private": true,
-    "type": "module",
-    "scripts": { "test": "./neon test/test.ne -o test/out.s" }
-}

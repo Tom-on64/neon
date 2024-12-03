@@ -1,4 +1,4 @@
-# Neon Documentation
+# Welcome to the Neon docs!
 
-_Comming soon!_
+It doesn't exist
 

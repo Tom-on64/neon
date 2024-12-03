@@ -1,38 +1,34 @@
 # Neon
-_A ~~Stable~~, ~~Fast~~, Low-level, Compiled Programming Language_
+_A ~~fast~~, ~~efficient~~, low-level, compiled programming language._
 
 ## Usage
-_[See docs for more info](./docs/main.md)_
+_See [Docs](docs/main.md) for more info_
 
-### Syntax
-Neon's syntax is a blend between C and JavaScript with some extra things for convenience sake.
+To compile a neon program, run:
+```sh
+neon /path/to/file.ne -o /output/file
+```
 
-### Compiling
-To compile a program written in Neon, you can use the Neon Compiler.\
-`$ neon ./path/to/file.ne -o ./output/file`\
-Then you can run the executable like this:\
-`./output/file`
+To see compiler flags, run:
+```sh
+neon -h # or `neon --help`
+```
 
-To see all compiler options, use the `-h` flag.\
-`$ neon -h`
-
-_Note: There currently isn't an executable, 
-so you can use `$ node ./src/main.js <flags>`_
-
-### Building Neon
-If you want to compile neon yourself, you can run these commands:
-```git
-$ git clone https://github.com/Tom-on64/neon.git # Clones the repo
-$ npm run build # Builds the exe into ./build
+## Building
+If you want to build neon yourself, run these commands:
+```sh
+git clone https://github.com/Tom-on64/neon.git # Clone the repo
+cd neon # Change into the source directory
+make # Builds the project, output will be in ./bin/neon
 ```
 
 ## Development
-### You can find todos [Here](./todo.txt).
-
-_More about development coming soon_
+### You can find the TODOs [Here](docs/todo.md)
+_More about development coming soon enough_
 
 ---
 
 For old repositories, see [neon-old](https://github.com/Tom-on64/neon-old).
-There's also the very first thing i wrote in my [random repo](https://github.com/Tom-on64/random) as [old_neon.js](https://github.com/Tom-on64/random/blob/main/old_neon.js)
+There's also the very first thing i wrote in my [random repo](https://github.com/Tom-on64/random)
+as [old_neon.js](https://github.com/Tom-on64/random/blob/main/old_neon.js)
 

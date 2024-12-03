@@ -1,14 +1,14 @@
 .DS_Store
 
 # Output files
-bin/
+bin
 *.s
 *.o
+*.out
+*.elf
 *.bin
 
 # Vim swp files
 *.swp
-
-# Test directory
-test/
+*.swo
 
