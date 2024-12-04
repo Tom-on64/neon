@@ -1,0 +1,50 @@
+// Root program rule
+program = { decl }, EOF;
+
+// Declarations
+decl = func_decl | var_decl;
+func_decl = type_spec, ident, "(", params, ")" (scope | EOL);
+params = [ param, { ",", param } ];
+param = type_spec, ident, [ "=", expr ];
+var_decl = type_spec, "*", ident, [ array_decl ], [ "=", expr ], EOL;
+array_decl = "[", expr, "]", { "[", expr, "]" } ;
+
+// Expressions
+expr = logical_or_expr;
+logor_expr = logand_expr, { "||", logand_expr } ;
+logand_expr = equ_expr, { "&&", equ_expr } ;
+equ_expr = rel_expr, { ("==" | "!="), rel_expr } ;
+rel_expr = add_expr, { ("<" | ">" | "<=" | ">="), add_expr } ;
+add_expr = mul_expr, { ("+" | "-"), mul_expr } ;
+mul_expr = unary_expr, { ("*" | "/" | "%"), unary_expr } ;
+unary_expr = [ "!" | "~" ], prim_expr ;
+prim_expr = func_call | ident | literal | "(", expr, ")" ;
+
+func_call = ident, "(", args, ")";
+args = [ expr, { ",", expr } ];
+
+ident = (L_ALPHA | "_"), { L_ALPHA | L_DIGIT | "_" };
+literal = L_STRING | L_FLOAT | L_INT | ("'", L_CHAR, "'") | L_BOOL;
+
+// Types
+type_spec = VOID | INT | FLOAT | CHAR | STRING | BOOL;
+VOID = "void";
+INT = ("u" | "i"), ("8" | "16" | "32" | "64");
+FLOAT = "f", ("32" | "64");
+CHAR = "char";
+STRING = "string";
+BOOL = "bool";
+
+// Literals
+L_STRING = "\"", { L_CHAR }, "\"";
+L_FLOAT = L_INT, ".", L_DIGIT, { L_DIGIT };
+L_INT = [ "+" | "-" ], [ L_DIGIT ], { L_DIGIT }, [ "f" ];
+L_DIGIT = ?[0-9]?;
+L_CHAR = ?ascii byte?;
+L_BOOL = "true" | "false";
+L_ALPHA = ?[A-Za-z]?;
+
+// Constants
+EOL = ";";
+EOF = ?end of file?;
+
