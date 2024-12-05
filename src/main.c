@@ -1,4 +1,7 @@
+#include <stdlib.h>
 #include <stdio.h>
+#include "lexer.h"
+#include "token.h"
 #include "error.h"
 
 int main(int argc, char** argv) {
@@ -44,8 +47,21 @@ int main(int argc, char** argv) {
     // No input given
     if (infile == NULL) error(E_ERR, "no input file given!\n");
 
-    // TODO: Actual compilation
-    error(E_DBG, "will compile '%s' into '%s'\n", infile, outfile);
+    FILE* fp = fopen(infile, "r");
+    if (fp == NULL) error(E_ERR, "file %s not found!\n", infile);
+
+    /* Lexer */
+    TokenList* tokens = tokenize("");
+    if (tokens == NULL) exit(1);    // NOTE: Not sure if this could happen
+    
+    for (int i = 0; i < tokens->count; i++) {
+        Token tkn = tokens->tokens[i];
+        error(E_DBG, "[%d:%d] TOKEN(%d) \"%s\"\n", tkn.row, tkn.col, tkn.type, tkn.lexeme);
+    }
+    
+    // Cleanup
+    fclose(fp);
+    free(tokens->tokens);
     
     return 0;
 }
